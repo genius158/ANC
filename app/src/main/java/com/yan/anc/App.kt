@@ -8,7 +8,7 @@ import android.app.Application
 class App : Application() {
 
     companion object {
-        lateinit var appComponent: DaggerAppComponent
+        lateinit var appComponent: DaggerAppDIContact_AppComponent
     }
 
     override fun onCreate() {
@@ -17,11 +17,11 @@ class App : Application() {
     }
 
     private fun initializeDagger() {
-        val dac = DaggerAppComponent.builder()
-                .appModule(AppModule(this))
+        val dac = DaggerAppDIContact_AppComponent.builder()
+                .appModule(AppDIContact.AppModule(this))
                 .build()
 
-        appComponent = dac as DaggerAppComponent
+        appComponent = dac as DaggerAppDIContact_AppComponent
     }
 
 }

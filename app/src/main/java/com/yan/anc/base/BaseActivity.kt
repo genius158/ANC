@@ -3,7 +3,7 @@ package com.yan.anc.base
 import android.app.Activity
 import android.os.Bundle
 import com.yan.anc.App
-import com.yan.anc.DaggerAppComponent
+import com.yan.anc.DaggerAppDIContact_AppComponent
 import com.yan.anc.utils.ToastHelper
 import javax.inject.Inject
 
@@ -22,6 +22,6 @@ abstract class BaseActivity : Activity() {
         appComponent(App.appComponent)
     }
 
-    protected abstract fun appComponent(appComponent: DaggerAppComponent)
+    protected abstract fun appComponent(appComponent: DaggerAppDIContact_AppComponent)
 
 }
