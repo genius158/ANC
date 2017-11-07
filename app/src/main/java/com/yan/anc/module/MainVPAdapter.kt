@@ -14,9 +14,9 @@ class MainVPAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
     private val fragmentLists: ArrayList<Fragment> = ArrayList()
 
     init {
-        fragmentLists.add(AndroidFragment())
-        fragmentLists.add(ComicAndAnimationFragment())
-        fragmentLists.add(NBAFragment())
+        fragmentLists.add(AndroidFragment.newInstance())
+        fragmentLists.add(ComicAndAnimationFragment.newInstance())
+        fragmentLists.add(NBAFragment.newInstance())
     }
 
     override fun getItem(position: Int): Fragment = fragmentLists.get(position)
