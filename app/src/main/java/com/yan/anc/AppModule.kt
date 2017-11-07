@@ -25,10 +25,10 @@ class AppModule(private val app: App) {
 
     @Provides
     @Singleton
-    fun provideToast(): ToastHelper = ToastHelper(app)
+    fun provideToastHelper(): ToastHelper = ToastHelper(app)
 
     @Provides
     @Singleton
-    fun provideRetrofit(): RetrofitHelper = RetrofitHelper(app)
+    fun provideRetrofitHelper(): RetrofitHelper = RetrofitHelper(app)
 
 }
