@@ -1,7 +1,7 @@
 package com.yan.anc.base
 
-import android.app.Activity
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import com.yan.anc.App
 import com.yan.anc.DaggerAppDIContact_AppComponent
 import com.yan.anc.utils.ToastHelper
@@ -11,7 +11,7 @@ import javax.inject.Inject
  * Created by Administrator on 2017/11/5.
  */
 
-abstract class BaseActivity : Activity() {
+abstract class BaseActivity : AppCompatActivity() {
 
     @Inject
     lateinit var toastHelper: ToastHelper
