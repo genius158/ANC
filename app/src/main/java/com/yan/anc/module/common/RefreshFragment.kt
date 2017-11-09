@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import com.yan.anc.R
 import com.yan.anc.base.BaseFragment
-import com.yan.anc.widget.RefreshLayout
 import com.yan.pullrefreshlayout.PullRefreshLayout
 
 /**
