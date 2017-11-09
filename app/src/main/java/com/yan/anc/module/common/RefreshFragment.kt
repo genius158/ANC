@@ -8,19 +8,20 @@ import android.view.ViewGroup
 import com.yan.anc.R
 import com.yan.anc.base.BaseFragment
 import com.yan.anc.widget.RefreshLayout
+import com.yan.pullrefreshlayout.PullRefreshLayout
 
 /**
  * Created by yan on 2017/11/5.
  */
 open class RefreshFragment : BaseFragment() {
     private var rootView: View? = null
-    protected lateinit var refreshLayout: RefreshLayout
+    protected lateinit var refreshLayout: PullRefreshLayout
     protected lateinit var recyclerView: RecyclerView
 
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         if (rootView == null) {
-            rootView = inflater!!.inflate(R.layout.fragment_frefresh, container, false)
+            rootView = inflater.inflate(R.layout.fragment_frefresh, container, false)
             onLoad(rootView as View)
         }
         return rootView
