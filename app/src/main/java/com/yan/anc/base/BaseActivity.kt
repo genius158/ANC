@@ -8,7 +8,7 @@ import com.yan.anc.utils.ToastHelper
 import javax.inject.Inject
 
 /**
- * Created by Administrator on 2017/11/5.
+ * Created by yan on 2017/11/5.
  */
 
 abstract class BaseActivity : AppCompatActivity() {

@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 
 /**
- * Created by Administrator on 2017/11/5.
+ * Created by yan on 2017/11/5.
  */
 
 abstract class BaseFragment : Fragment() {
