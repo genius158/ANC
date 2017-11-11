@@ -42,6 +42,8 @@ class RefreshHeader(context: Context, private val pullRefreshLayout: RefreshLayo
     private val refreshEndRepeatListener: AnimatorListenerAdapter = object : AnimatorListenerAdapter() {
         override fun onAnimationRepeat(animation: Animator) {
             if (isRefreshFinish) {
+                rotation = 0
+                invalidate()
                 pullRefreshLayout.superRefreshComplete()
                 animation.cancel()
             }
@@ -128,10 +130,10 @@ class RefreshHeader(context: Context, private val pullRefreshLayout: RefreshLayo
 
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
-        if (pullState == 1) {
+        if (isRefreshFinish) {
+            refreshEndRepeatListener.onAnimationRepeat(refreshingAnimation)
+        } else if (pullState == 1) {
             refreshingAnimation.start()
-        } else if (isRefreshFinish) {
-            refreshEndRepeatListener.onAnimationEnd(refreshingAnimation)
         }
     }
 
