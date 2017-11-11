@@ -39,20 +39,22 @@ class RefreshHeader(context: Context, private val pullRefreshLayout: RefreshLayo
 
     private var isRefreshFinish: Boolean = false
 
+    private val refreshEndRepeatListener: AnimatorListenerAdapter = object : AnimatorListenerAdapter() {
+        override fun onAnimationRepeat(animation: Animator) {
+            if (isRefreshFinish) {
+                pullRefreshLayout.superRefreshComplete()
+                animation.cancel()
+            }
+        }
+    }
+
     private val refreshingAnimation: ValueAnimator = ValueAnimator.ofInt(0, 360).apply {
         duration = 1300
         repeatCount = ValueAnimator.INFINITE
         repeatMode = ValueAnimator.RESTART
         interpolator = LinearInterpolator()
         addUpdateListener({ animation -> rotation = animation.animatedValue as Int })
-        addListener(object : AnimatorListenerAdapter() {
-            override fun onAnimationRepeat(animation: Animator) {
-                if (isRefreshFinish) {
-                    pullRefreshLayout.superRefreshComplete()
-                    animation.cancel()
-                }
-            }
-        })
+        addListener(refreshEndRepeatListener)
     }
 
     init {
@@ -122,6 +124,15 @@ class RefreshHeader(context: Context, private val pullRefreshLayout: RefreshLayo
 
     fun refreshFinish() {
         isRefreshFinish = true
+    }
+
+    override fun onAttachedToWindow() {
+        super.onAttachedToWindow()
+        if (pullState == 1) {
+            refreshingAnimation.start()
+        } else if (isRefreshFinish) {
+            refreshEndRepeatListener.onAnimationEnd(refreshingAnimation)
+        }
     }
 
     override fun onDetachedFromWindow() {
