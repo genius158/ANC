@@ -1,12 +1,16 @@
 package com.yan.anc
 
 import android.content.Context
-import com.yan.anc.module.MainDIContact
-import com.yan.anc.utils.RetrofitHelper
+import com.yan.anc.api.ANCApi
+import com.yan.anc.module.MainActivity
+import com.yan.anc.module.common.RefreshDIContact
+import com.yan.anc.module.common.viewmodel.ModelFactory
 import com.yan.anc.utils.ToastHelper
 import dagger.Component
 import dagger.Module
 import dagger.Provides
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
 /**
@@ -18,13 +22,21 @@ class AppDIContact {
             AppModule::class
     ))
     interface AppComponent {
-        fun plus(module: MainDIContact.MainModule): MainDIContact.MainComponent
+        fun injectTo(mainActivity: MainActivity)
+
+        fun plus(module: RefreshDIContact.RefreshModule): RefreshDIContact.RefreshComponent
+
     }
 
     //------------------------------- line ----------------------------------
 
     @Module
     class AppModule(private val app: App) {
+        private val api: ANCApi = Retrofit.Builder()
+                .baseUrl("https://api.github.com/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+                .create(ANCApi::class.java)
 
         @Provides
         @Singleton
@@ -40,7 +52,11 @@ class AppDIContact {
 
         @Provides
         @Singleton
-        fun provideRetrofitHelper(): RetrofitHelper = RetrofitHelper(app)
+        fun provideApi(): ANCApi = api
+
+        @Provides
+        @Singleton
+        fun provideModelFactory(): ModelFactory = ModelFactory(api)
 
     }
 }

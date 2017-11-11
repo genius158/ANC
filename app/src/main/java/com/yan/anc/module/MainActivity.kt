@@ -6,14 +6,12 @@ import com.yan.anc.DaggerAppDIContact_AppComponent
 import com.yan.anc.R
 import com.yan.anc.base.BaseActivity
 import kotlinx.android.synthetic.main.activity_main.*
-import javax.inject.Inject
 
 /**
  * Created by yan on 2017/11/5.
  */
-class MainActivity : BaseActivity(), MainMVPContact.MainView {
+class MainActivity : BaseActivity() {
 
-    @Inject lateinit var presenter: MainMVPContact.MainPresenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,7 +20,7 @@ class MainActivity : BaseActivity(), MainMVPContact.MainView {
     }
 
     override fun appComponent(appComponent: DaggerAppDIContact_AppComponent) {
-        appComponent.plus(MainDIContact.MainModule(this)).injectTo(this)
+        appComponent.injectTo(this)
     }
 
     private fun load() {
@@ -42,5 +40,15 @@ class MainActivity : BaseActivity(), MainMVPContact.MainView {
             }
             false
         }
+    }
+
+    private var lastTime: Long = 0
+    override fun onBackPressed() {
+        if (System.currentTimeMillis() - lastTime < 1000) {
+            super.onBackPressed()
+        } else {
+            toastHelper.showShortToast(getString(R.string.title_exit_app))
+        }
+        lastTime = System.currentTimeMillis()
     }
 }

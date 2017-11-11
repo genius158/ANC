@@ -11,7 +11,7 @@ import javax.inject.Inject
  * Created by yan on 2017/11/5.
  */
 
-abstract class BaseActivity : AppCompatActivity() {
+open class BaseActivity : AppCompatActivity() {
 
     @Inject
     lateinit var toastHelper: ToastHelper
@@ -22,6 +22,6 @@ abstract class BaseActivity : AppCompatActivity() {
         appComponent(App.appComponent)
     }
 
-    protected abstract fun appComponent(appComponent: DaggerAppDIContact_AppComponent)
+    protected open fun appComponent(appComponent: DaggerAppDIContact_AppComponent) {}
 
 }

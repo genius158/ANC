@@ -1,9 +1,12 @@
 <resources>
     <string name="app_name">ANC</string>
 
+    <string name="title_cv">pass</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_android">Android</string>
     <string name="title_nba">NBA</string>
     <string name="title_comic">Comic</string>
+    <string name="title_exit_app">在按一次退出</string>
 </resources>

@@ -7,7 +7,10 @@ import android.view.View
 import android.view.ViewGroup
 import com.yan.anc.R
 import com.yan.anc.base.BaseFragment
+import com.yan.anc.module.common.viewmodel.ModelFactory
+import com.yan.anc.DaggerAppDIContact_AppComponent
 import com.yan.pullrefreshlayout.PullRefreshLayout
+import javax.inject.Inject
 
 /**
  * Created by yan on 2017/11/5.
@@ -17,6 +20,7 @@ open class RefreshFragment : BaseFragment() {
     protected lateinit var refreshLayout: PullRefreshLayout
     protected lateinit var recyclerView: RecyclerView
 
+    @Inject lateinit var modelFactory: ModelFactory
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         if (rootView == null) {
@@ -29,5 +33,9 @@ open class RefreshFragment : BaseFragment() {
     protected open fun onLoad(rootView: View) {
         refreshLayout = rootView.findViewById(R.id.refreshLayout)
         recyclerView = rootView.findViewById(R.id.recyclerView)
+    }
+
+    override fun appComponent(appComponent: DaggerAppDIContact_AppComponent) {
+        appComponent.plus(RefreshDIContact.RefreshModule()).injectTo(this)
     }
 }
