@@ -10,6 +10,7 @@ import android.arch.lifecycle.LifecycleOwner
 import android.content.Context
 import android.graphics.*
 import android.os.Build
+import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.util.AttributeSet
 import android.util.Log
@@ -21,6 +22,7 @@ import com.yan.anc.R
  * Created by yan on 2017/11/7.
  */
 class CountdownView(context: Context, attrs: AttributeSet) : View(context, attrs), GenericLifecycleObserver {
+    private var fragment: Fragment? = null
 
     private val TITLE: String by lazy { context.getString(R.string.title_cv) }
 
@@ -119,10 +121,21 @@ class CountdownView(context: Context, attrs: AttributeSet) : View(context, attrs
         valueAnimation.cancel()
     }
 
+    fun attachFragment(fragment: Fragment) {
+        this.fragment = fragment
+    }
+
     private fun getLifecycleOwner(): LifecycleOwner? {
-        if (context is LifecycleOwner) {
-            return context as LifecycleOwner
+        if (fragment == null) {
+            if (context is LifecycleOwner) {
+                return context as LifecycleOwner
+            }
+        } else {
+            if (fragment is LifecycleOwner) {
+                return fragment
+            }
         }
+
         return null
     }
 
