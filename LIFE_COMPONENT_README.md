@@ -1,6 +1,6 @@
 # 实现自定义控件生命周期的自我管理 例子:[CountdownView](https://github.com/genius158/ANC/blob/master/app/src/main/java/com/yan/anc/widget/CountdownView.kt)
 
-## [DOME下载]()
+## [DOME下载](https://github.com/genius158/ANC/raw/master/app-debug.apk)
 
 ## 说明（原码解析已经有人发过了，这里就不缀述了）
 26.1.0的版本activity和fragment都已经实现了LifecycleOwner这个接口，就意味着以后都可以通过注册监听器组件的生命周期，从而可以实现控件生命周期的自我管理
