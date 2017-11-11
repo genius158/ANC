@@ -2,7 +2,7 @@
 
 ## [DOME下载](https://github.com/genius158/ANC/raw/master/app-debug.apk)
 
-## 说明（原码解析已经有人发过了，这里就不缀述了）
+## 说明（Android架构组件原码解析已经有人发过了，这里就不缀述了）
 26.1.0的版本activity和fragment都已经实现了LifecycleOwner这个接口，就意味着以后都可以通过注册监听器组件的生命周期，从而可以实现控件生命周期的自我管理
 <br/>
 LifecycleRegistry是Lifecycle的子类，也是管理生命周期的核心组件，GenericLifecycleObserver这个接口则是生命周期直接响应的接口，所以我们要实现这个接口
