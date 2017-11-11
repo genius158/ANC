@@ -35,7 +35,7 @@ class CountdownView(context: Context, attrs: AttributeSet) : View(context, attrs
 
     private val circlePaint: Paint by lazy {
         Paint().apply {
-            strokeWidth = width.toFloat() / 11
+            strokeWidth = width.toFloat() / 12
             style = Paint.Style.STROKE
             isAntiAlias = true
             color = textColor
@@ -135,7 +135,7 @@ class CountdownView(context: Context, attrs: AttributeSet) : View(context, attrs
             Lifecycle.Event.ON_PAUSE -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                 valueAnimation.pause()
             }
-            Lifecycle.Event.ON_DESTROY -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            Lifecycle.Event.ON_DESTROY -> {
                 cancel()
                 source.lifecycle.removeObserver(this)
             }
