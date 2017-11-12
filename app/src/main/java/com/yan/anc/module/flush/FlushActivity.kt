@@ -4,7 +4,11 @@ import android.arch.lifecycle.Lifecycle
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
+import android.support.v4.view.ViewCompat
+import android.support.v4.widget.ImageViewCompat
 import com.gyf.barlibrary.ImmersionBar
 
 import com.yan.anc.R
@@ -28,6 +32,8 @@ class FlushActivity : BaseActivity() {
     }
 
     private fun loadView() {
+        ImageViewCompat.setImageTintList(flushIvAndroid, ColorStateList.valueOf(ContextCompat.getColor(baseContext, R.color.cr515151)))
+
         flushCv.onCountDownEndListener = { toMain() }
         flushCv.setOnClickListener {
             flushCv.cancel()

@@ -6,6 +6,7 @@ import android.arch.lifecycle.ViewModelProvider
 import android.graphics.drawable.Drawable
 import android.widget.ImageView
 import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
@@ -24,7 +25,7 @@ class FlushViewModel(activity: FlushActivity, wrIv: WeakReference<ImageView>) : 
     fun getTurnRoad(): MutableLiveData<Int> = turnRoad
 
     init {
-        GlideApp.with(activity).load(flushImg).centerCrop().listener(object : RequestListener<Drawable> {
+        GlideApp.with(activity).load(flushImg).diskCacheStrategy(DiskCacheStrategy.NONE).centerCrop().listener(object : RequestListener<Drawable> {
             override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
                 turnRoad.value = 1
                 return false

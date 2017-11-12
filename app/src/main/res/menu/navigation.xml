@@ -3,17 +3,17 @@
 
     <item
         android:id="@+id/android"
-        android:icon="@drawable/ic_launcher_background"
+        android:icon="@drawable/ic_android"
         android:title="@string/title_android" />
 
     <item
         android:id="@+id/nba"
-        android:icon="@drawable/ic_launcher_background"
+        android:icon="@drawable/ic_nba"
         android:title="@string/title_nba" />
 
     <item
         android:id="@+id/comic"
-        android:icon="@drawable/ic_launcher_background"
+        android:icon="@drawable/ic_comic"
         android:title="@string/title_comic" />
 
 </menu>
