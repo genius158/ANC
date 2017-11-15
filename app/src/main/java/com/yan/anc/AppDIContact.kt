@@ -5,10 +5,13 @@ import com.yan.anc.api.ANCApi
 import com.yan.anc.module.MainActivity
 import com.yan.anc.module.common.RefreshDIContact
 import com.yan.anc.module.common.viewmodel.ModelFactory
+import com.yan.anc.repository.LiveDataCallAdapterFactory
 import com.yan.anc.utils.ToastHelper
 import dagger.Component
 import dagger.Module
 import dagger.Provides
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
@@ -35,6 +38,10 @@ class AppDIContact {
         private val api: ANCApi = Retrofit.Builder()
                 .baseUrl("https://api.github.com/")
                 .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(LiveDataCallAdapterFactory())
+                .client(OkHttpClient.Builder()
+                        .addInterceptor(HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BODY })
+                        .build())
                 .build()
                 .create(ANCApi::class.java)
 
@@ -60,3 +67,4 @@ class AppDIContact {
 
     }
 }
+

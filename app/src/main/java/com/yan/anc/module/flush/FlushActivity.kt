@@ -7,8 +7,8 @@ import android.content.Intent
 import android.content.res.ColorStateList
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
-import android.support.v4.view.ViewCompat
 import android.support.v4.widget.ImageViewCompat
+import android.util.Log
 import com.gyf.barlibrary.ImmersionBar
 
 import com.yan.anc.R
@@ -47,6 +47,7 @@ class FlushActivity : BaseActivity() {
             when (road) {
                 1 -> flushCv.star()
                 -1 -> flushIv.postDelayed({
+                    Log.e("TestLiveData", "TestLiveData")
                     if (lifecycle.currentState != Lifecycle.State.DESTROYED) {
                         toMain()
                     }

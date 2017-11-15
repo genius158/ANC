@@ -33,9 +33,19 @@ open class RefreshFragment : BaseFragment() {
     protected open fun onLoad(rootView: View) {
         refreshLayout = rootView.findViewById(R.id.refreshLayout)
         recyclerView = rootView.findViewById(R.id.recyclerView)
+
+        refreshLayout.setOnRefreshListener(object : PullRefreshLayout.OnRefreshListenerAdapter() {
+            override fun onRefresh() {
+                this@RefreshFragment.onRefresh()
+            }
+        })
     }
 
     override fun appComponent(appComponent: DaggerAppDIContact_AppComponent) {
         appComponent.plus(RefreshDIContact.RefreshModule()).injectTo(this)
+    }
+
+    open fun onRefresh() {
+
     }
 }

@@ -20,23 +20,34 @@ import com.yan.pullrefreshlayout.ShowGravity
 /**
  * Created by yan on 2017/11/7.
  */
-class RefreshLayout(context: Context, attrs: AttributeSet) : PullRefreshLayout(context, attrs) {
+class RefreshLayout(context: Context, attrs: AttributeSet) : PullRefreshLayout(context, attrs), Runnable {
+
+    private var onRefreshListener: OnRefreshListener? = null
+
     init {
         setHeaderShowGravity(ShowGravity.FOLLOW_CENTER)
         setHeaderView(RefreshHeader())
 
-        setOnRefreshListener(object : OnRefreshListenerAdapter() {
+        super.setOnRefreshListener(object : OnRefreshListenerAdapter() {
             override fun onRefresh() {
-                super.onRefresh()
-                postDelayed({ refreshComplete() }, 2000L)
+                onRefreshListener?.onRefresh()
+                postDelayed(this@RefreshLayout, 2000L)
             }
         })
     }
 
+    override fun setOnRefreshListener(onRefreshListener: OnRefreshListener?) {
+        this.onRefreshListener = onRefreshListener
+    }
+
     fun superRefreshComplete() = super.refreshComplete()
 
-    override fun refreshComplete() = getHeaderView<RefreshHeader>().refreshFinish()
+    override fun refreshComplete() {
+        removeCallbacks(this)
+        getHeaderView<RefreshHeader>().refreshFinish()
+    }
 
+    override fun run() = refreshComplete()
 
     /**
      * refreshHeader
