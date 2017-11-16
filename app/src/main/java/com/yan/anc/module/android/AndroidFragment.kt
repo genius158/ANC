@@ -38,7 +38,7 @@ class AndroidFragment : RefreshFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        refreshLayout.postDelayed({ refreshLayout.refreshComplete() }, 120)
+        refreshLayout.postDelayed({ refreshLayout.autoRefresh() }, 120)
     }
 
     override fun onRefresh() {
