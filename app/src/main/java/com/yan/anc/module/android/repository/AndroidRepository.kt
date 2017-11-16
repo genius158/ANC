@@ -2,6 +2,7 @@ package com.yan.anc.module.android.repository
 
 import com.yan.anc.repository.ApiResponse
 import android.arch.lifecycle.LiveData
+import android.util.Log
 import com.yan.anc.api.ANCApi
 import com.yan.anc.repository.NetworkBoundResource
 import com.yan.anc.repository.Resource
@@ -19,8 +20,8 @@ internal class AndroidRepository(val api: ANCApi) {
 
     fun getDatas(pageNo: Int): LiveData<Resource<ApiResponse<List<AndroidData>>>> {
         return object : NetworkBoundResource<ApiResponse<List<AndroidData>>, ApiResponse<List<AndroidData>>>() {
-            override fun saveCallResult(item: ApiResponse<List<AndroidData>>?) {
-                api
+            override fun saveCallResult(asyncTask: NotifyAsyncTask, item: ApiResponse<List<AndroidData>>?) {
+                Log.e("asyncTask", asyncTask.isCancelled.toString())
             }
 
             override fun shouldFetch(@Nullable data: ApiResponse<List<AndroidData>>?): Boolean {

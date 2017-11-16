@@ -10,6 +10,7 @@ import com.yan.anc.module.android.repository.AndroidData
 import com.yan.anc.module.common.RefreshFragment
 import com.yan.anc.repository.ApiResponse
 import com.yan.anc.repository.Resource
+import com.yan.anc.repository.Status
 import kotlin.collections.ArrayList
 
 /**
@@ -27,11 +28,17 @@ class AndroidFragment : RefreshFragment() {
             Log.e("androidViewModel", data?.data.toString() + "   " + data?.isRefresh + "   " + data?.status + "    androidViewModel")
 
             data?.let {
-                if (it.isRefresh!!){
+                if (it.isRefresh!! && it.status != Status.LOADING) {
                     refreshLayout.refreshComplete()
                 }
             }
         })
+
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        refreshLayout.postDelayed({ refreshLayout.refreshComplete() }, 120)
     }
 
     override fun onRefresh() {

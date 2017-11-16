@@ -24,7 +24,14 @@ import org.jetbrains.annotations.Nullable
 import android.support.annotation.WorkerThread
 
 abstract class NetworkBoundResource<ResultType, RequestType> @MainThread constructor() {
-    private val result = MediatorLiveData<Resource<ResultType>>()
+    private val result: MediatorLiveData<Resource<ResultType>> = object : MediatorLiveData<Resource<ResultType>>() {
+        override fun onInactive() {
+            super.onInactive()
+            saveAsyncTask?.cancel(true)
+        }
+    }
+
+    private var saveAsyncTask: NotifyAsyncTask? = null
 
     init {
         result.setValue(Resource.loading(null, isRefresh()))
@@ -70,40 +77,43 @@ abstract class NetworkBoundResource<ResultType, RequestType> @MainThread constru
         }
     }
 
+    @Suppress("UNCHECKED_CAST")
     @SuppressLint("StaticFieldLeak")
-    @MainThread
-    private fun saveResultAndReInit(response: ApiResponse<RequestType>) {
-        object : AsyncTask<Any, Any, Any>() {
-            override fun doInBackground(vararg any: Any): Any {
-                saveCallResult(response.results)
-                return Any()
-            }
+    inner class NotifyAsyncTask : AsyncTask<Any, Any, Any>() {
+        override fun doInBackground(vararg response: Any): Any {
+            saveCallResult(this, (response[0] as ApiResponse<RequestType>).results)
+            return response[0]
+        }
 
-            @Suppress("UNCHECKED_CAST")
-            override fun onPostExecute(any: Any) {
-                // we specially request a new live data,
-                // otherwise we will get immediately last cached value,
-                // which may not be updated with latest results received from network.
+        override fun onPostExecute(response: Any) {
+            if (isCancelled) return
 
-                val dbSource: LiveData<ResultType>? = loadFromDb()
-                if (dbSource == null) {
-                    try {
-                        val data: Resource<ResultType> = Resource.success(response.results as ResultType, isRefresh())!!
-                        result.value = data
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                    }
-
-                } else {
-                    result.addSource(dbSource) { newData -> result.setValue(Resource.success(newData, isRefresh())) }
+            val dbSource: LiveData<ResultType>? = loadFromDb()
+            if (dbSource == null) {
+                try {
+                    val data: Resource<ResultType> = Resource.success((response as ApiResponse<*>).results as ResultType, isRefresh())!!
+                    this@NetworkBoundResource.result.value = data
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            } else {
+                this@NetworkBoundResource.result.addSource(dbSource) { newData ->
+                    result.setValue(Resource.success(newData, isRefresh()))
                 }
             }
-        }.execute()
+        }
+    }
+
+    @MainThread
+    private fun saveResultAndReInit(response: ApiResponse<RequestType>) {
+        if (saveAsyncTask == null || saveAsyncTask!!.isCancelled) {
+            saveAsyncTask = NotifyAsyncTask().apply { execute(response) }
+        }
     }
 
     // Called to save the result of the API response into the database
     @WorkerThread
-    protected abstract fun saveCallResult(item: RequestType?)
+    protected abstract fun saveCallResult(asyncTask: NotifyAsyncTask, item: RequestType?)
 
     // Called with the data in the database to decide whether it should be
     // fetched from the network.

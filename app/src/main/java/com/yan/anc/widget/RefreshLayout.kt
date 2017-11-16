@@ -1,7 +1,5 @@
 package com.yan.anc.widget
 
-import android.animation.Animator
-import android.animation.AnimatorListenerAdapter
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.content.Context
@@ -30,8 +28,8 @@ class RefreshLayout(context: Context, attrs: AttributeSet) : PullRefreshLayout(c
 
         super.setOnRefreshListener(object : OnRefreshListenerAdapter() {
             override fun onRefresh() {
-                onRefreshListener?.onRefresh()
                 postDelayed(this@RefreshLayout, 2000L)
+                onRefreshListener?.onRefresh()
             }
         })
     }
@@ -40,11 +38,9 @@ class RefreshLayout(context: Context, attrs: AttributeSet) : PullRefreshLayout(c
         this.onRefreshListener = onRefreshListener
     }
 
-    fun superRefreshComplete() = super.refreshComplete()
-
     override fun refreshComplete() {
         removeCallbacks(this)
-        getHeaderView<RefreshHeader>().refreshFinish()
+        super.refreshComplete()
     }
 
     override fun run() = refreshComplete()
@@ -71,26 +67,12 @@ class RefreshLayout(context: Context, attrs: AttributeSet) : PullRefreshLayout(c
 
         private var pullState = 0
 
-        private var isRefreshFinish: Boolean = false
-
-        private val refreshEndRepeatListener: AnimatorListenerAdapter = object : AnimatorListenerAdapter() {
-            override fun onAnimationRepeat(animation: Animator) {
-                if (isRefreshFinish) {
-                    rotation = 0
-                    invalidate()
-                    superRefreshComplete()
-                    animation.cancel()
-                }
-            }
-        }
-
         private val refreshingAnimation: ValueAnimator = ValueAnimator.ofInt(0, 360).apply {
             duration = 1300
             repeatCount = ValueAnimator.INFINITE
             repeatMode = ValueAnimator.RESTART
             interpolator = LinearInterpolator()
             addUpdateListener({ animation -> rotation = animation.animatedValue as Int })
-            addListener(refreshEndRepeatListener)
         }
 
         init {
@@ -158,15 +140,10 @@ class RefreshLayout(context: Context, attrs: AttributeSet) : PullRefreshLayout(c
             return (fontMetrics.descent - fontMetrics.ascent) / 2 - fontMetrics.descent
         }
 
-        fun refreshFinish() {
-            isRefreshFinish = true
-        }
 
         override fun onAttachedToWindow() {
             super.onAttachedToWindow()
-            if (isRefreshFinish) {
-                refreshEndRepeatListener.onAnimationRepeat(refreshingAnimation)
-            } else if (pullState == 1) {
+            if (pullState == 1) {
                 refreshingAnimation.start()
             }
         }
@@ -185,7 +162,6 @@ class RefreshLayout(context: Context, attrs: AttributeSet) : PullRefreshLayout(c
         override fun onPullReset() {
             pullState = 0
             rotation = 0
-            isRefreshFinish = false
         }
 
         override fun onPullChange(percent: Float) {
@@ -197,6 +173,7 @@ class RefreshLayout(context: Context, attrs: AttributeSet) : PullRefreshLayout(c
 
         override fun onPullFinish() {
             pullState = 2
+            refreshingAnimation.end()
         }
 
         override fun onPullHoldTrigger() {}
