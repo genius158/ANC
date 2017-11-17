@@ -6,5 +6,9 @@
 
     <color name="colorCvPrimary">#FEFEFE</color>
     <color name="colorCvBg">#d8000000</color>
+    <color name="crFFFFFF">#FFFFFF</color>
     <color name="cr515151">#515151</color>
+    <color name="cr40000000">#40000000</color>
+    <color name="cr999999">#999999</color>
+    <color name="cr666666">#666666</color>
 </resources>

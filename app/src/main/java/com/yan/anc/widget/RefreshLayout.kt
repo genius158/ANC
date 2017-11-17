@@ -19,7 +19,6 @@ import com.yan.pullrefreshlayout.ShowGravity
  * Created by yan on 2017/11/7.
  */
 class RefreshLayout(context: Context, attrs: AttributeSet) : PullRefreshLayout(context, attrs), Runnable {
-
     private var onRefreshListener: OnRefreshListener? = null
 
     init {
@@ -28,7 +27,7 @@ class RefreshLayout(context: Context, attrs: AttributeSet) : PullRefreshLayout(c
 
         super.setOnRefreshListener(object : OnRefreshListenerAdapter() {
             override fun onRefresh() {
-                postDelayed(this@RefreshLayout, 2000L)
+                postDelayed(this@RefreshLayout, 6000L)
                 onRefreshListener?.onRefresh()
             }
         })

@@ -29,7 +29,7 @@ class CountdownView(context: Context, attrs: AttributeSet) : View(context, attrs
     private val textColor: Int by lazy { ContextCompat.getColor(context, R.color.colorCvPrimary) }
     private val bgColor: Int by lazy { ContextCompat.getColor(context, R.color.colorCvBg) }
 
-    private val DURING: Int = 4000
+    private val DURING: Int = 3000
 
     private var rotation: Int = 0
 

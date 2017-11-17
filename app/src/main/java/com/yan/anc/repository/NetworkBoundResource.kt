@@ -27,7 +27,7 @@ abstract class NetworkBoundResource<ResultType, RequestType> @MainThread constru
     private val result: MediatorLiveData<Resource<ResultType>> = object : MediatorLiveData<Resource<ResultType>>() {
         override fun onInactive() {
             super.onInactive()
-            saveAsyncTask?.cancelTask()
+            saveAsyncTask?.markInActive()
         }
     }
 
@@ -67,8 +67,10 @@ abstract class NetworkBoundResource<ResultType, RequestType> @MainThread constru
                     saveResultAndReInit(response)
                 } else {
                     onFetchFailed()
-                    dbSource?.let {
-                        result.addSource(it) { newData ->
+                    if (dbSource == null) {
+                        result.setValue(Resource.error(response.error, null, isRefresh()))
+                    } else {
+                        result.addSource(dbSource) { newData ->
                             result.setValue(Resource.error(response.error, newData, isRefresh()))
                         }
                     }
@@ -80,15 +82,14 @@ abstract class NetworkBoundResource<ResultType, RequestType> @MainThread constru
     @Suppress("UNCHECKED_CAST")
     @SuppressLint("StaticFieldLeak")
     inner class NotifyAsyncTask : AsyncTask<Any, Any, Any>() {
-        private val sCancelled: BooleanArray = BooleanArray(1)
+        private val inActive: BooleanArray = BooleanArray(1)
 
-        fun cancelTask() {
-            sCancelled[0] = true
-            cancel(true)
+        fun markInActive() {
+            inActive[0] = true
         }
 
         override fun doInBackground(vararg response: Any): Any {
-            saveCallResult((response[0] as ApiResponse<RequestType>).results!!, sCancelled)
+            saveCallResult((response[0] as ApiResponse<RequestType>).results!!, inActive)
             return response[0]
         }
 
@@ -108,6 +109,7 @@ abstract class NetworkBoundResource<ResultType, RequestType> @MainThread constru
                     result.setValue(Resource.success(newData, isRefresh()))
                 }
             }
+            saveAsyncTask = null
         }
     }
 
@@ -120,7 +122,7 @@ abstract class NetworkBoundResource<ResultType, RequestType> @MainThread constru
 
     // Called to save the result of the API response into the database
     @WorkerThread
-    protected abstract fun saveCallResult(item: RequestType, sCancelled: BooleanArray)
+    protected abstract fun saveCallResult(item: RequestType, inActive: BooleanArray)
 
     // Called with the data in the database to decide whether it should be
     // fetched from the network.

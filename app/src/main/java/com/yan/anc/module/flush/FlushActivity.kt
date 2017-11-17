@@ -58,7 +58,7 @@ class FlushActivity : BaseActivity() {
 
     private fun toMain() {
         startActivity(Intent(this, MainActivity::class.java))
-//        finish()
+        finish()
     }
 
     override fun onBackPressed() {}

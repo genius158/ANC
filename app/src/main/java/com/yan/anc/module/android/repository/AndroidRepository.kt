@@ -20,9 +20,9 @@ internal class AndroidRepository(val api: ANCApi) {
 
     fun getDatas(pageNo: Int): LiveData<Resource<ApiResponse<List<AndroidData>>>> {
         return object : NetworkBoundResource<ApiResponse<List<AndroidData>>, ApiResponse<List<AndroidData>>>() {
-            override fun saveCallResult(item: ApiResponse<List<AndroidData>>, sCancelled: BooleanArray) {
+            override fun saveCallResult(item: ApiResponse<List<AndroidData>>, inActive: BooleanArray) {
                 Thread.sleep(1000)
-                Log.e("asyncTask", sCancelled[0].toString())
+                Log.e("asyncTask", inActive[0].toString())
             }
 
             override fun shouldFetch(@Nullable data: ApiResponse<List<AndroidData>>?): Boolean {
