@@ -33,9 +33,7 @@ import retrofit2.Response
 </R> */
 class LiveDataCallAdapter<R>(private val responseType: Type) : CallAdapter<R, LiveData<ApiResponse<R>>> {
 
-    override fun responseType(): Type {
-        return responseType
-    }
+    override fun responseType(): Type = responseType
 
     override fun adapt(call: Call<R>): LiveData<ApiResponse<R>> {
         return object : LiveData<ApiResponse<R>>() {

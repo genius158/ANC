@@ -7,8 +7,6 @@ import com.yan.anc.base.BaseFragment
  */
 class NBAFragment : BaseFragment() {
     companion object {
-        fun newInstance(): NBAFragment {
-            return makeArgs(NBAFragment()) as NBAFragment
-        }
+        fun newInstance(): NBAFragment = makeArgs(NBAFragment()) as NBAFragment
     }
 }

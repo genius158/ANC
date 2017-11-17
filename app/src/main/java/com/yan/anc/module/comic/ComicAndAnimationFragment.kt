@@ -7,8 +7,6 @@ import com.yan.anc.base.BaseFragment
  */
 class ComicAndAnimationFragment : BaseFragment() {
     companion object {
-        fun newInstance(): ComicAndAnimationFragment {
-            return makeArgs(ComicAndAnimationFragment()) as ComicAndAnimationFragment
-        }
+        fun newInstance(): ComicAndAnimationFragment = makeArgs(ComicAndAnimationFragment()) as ComicAndAnimationFragment
     }
 }

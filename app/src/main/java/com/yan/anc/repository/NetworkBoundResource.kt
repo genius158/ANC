@@ -81,7 +81,7 @@ abstract class NetworkBoundResource<ResultType, RequestType> @MainThread constru
     @SuppressLint("StaticFieldLeak")
     inner class NotifyAsyncTask : AsyncTask<Any, Any, Any>() {
         override fun doInBackground(vararg response: Any): Any {
-            saveCallResult(this, (response[0] as ApiResponse<RequestType>).results)
+            saveCallResult(isCancelled, (response[0] as ApiResponse<RequestType>).results!!)
             return response[0]
         }
 
@@ -113,7 +113,7 @@ abstract class NetworkBoundResource<ResultType, RequestType> @MainThread constru
 
     // Called to save the result of the API response into the database
     @WorkerThread
-    protected abstract fun saveCallResult(asyncTask: NotifyAsyncTask, item: RequestType?)
+    protected abstract fun saveCallResult(isCancelled: Boolean, item: RequestType)
 
     // Called with the data in the database to decide whether it should be
     // fetched from the network.
@@ -122,15 +122,11 @@ abstract class NetworkBoundResource<ResultType, RequestType> @MainThread constru
 
     // get data status
     @MainThread
-    protected open fun isRefresh(): Boolean {
-        return true
-    }
+    protected open fun isRefresh(): Boolean = true
 
     // Called to get the cached data from the database
     @MainThread
-    protected open fun loadFromDb(): LiveData<ResultType>? {
-        return null
-    }
+    protected open fun loadFromDb(): LiveData<ResultType>? = null
 
     // Called to create the API call.
     @MainThread
@@ -144,8 +140,6 @@ abstract class NetworkBoundResource<ResultType, RequestType> @MainThread constru
 
     // returns a LiveData that represents the resource, implemented
     // in the base class.
-    fun getAsLiveData(): LiveData<Resource<ResultType>> {
-        return result
-    }
+    fun getAsLiveData(): LiveData<Resource<ResultType>> = result
 
 }

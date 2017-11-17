@@ -36,11 +36,6 @@ class AndroidFragment : RefreshFragment() {
 
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        refreshLayout.postDelayed({ refreshLayout.autoRefresh() }, 120)
-    }
-
     override fun onRefresh() {
         androidViewModel.getData()
     }
@@ -55,12 +50,12 @@ class AndroidFragment : RefreshFragment() {
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.adapter = AndroidAdapter(context, dataList)
 
+
+        refreshLayout.postDelayed({ refreshLayout.autoRefresh() }, 120)
     }
 
     companion object {
-        fun newInstance(): AndroidFragment {
-            return makeArgs(AndroidFragment()) as AndroidFragment
-        }
+        fun newInstance(): AndroidFragment = makeArgs(AndroidFragment()) as AndroidFragment
     }
 
 }
