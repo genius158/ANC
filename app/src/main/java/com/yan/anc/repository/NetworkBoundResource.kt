@@ -27,7 +27,7 @@ abstract class NetworkBoundResource<ResultType, RequestType> @MainThread constru
     private val result: MediatorLiveData<Resource<ResultType>> = object : MediatorLiveData<Resource<ResultType>>() {
         override fun onInactive() {
             super.onInactive()
-            saveAsyncTask?.cancel(true)
+            saveAsyncTask?.cancelTask()
         }
     }
 
@@ -80,8 +80,15 @@ abstract class NetworkBoundResource<ResultType, RequestType> @MainThread constru
     @Suppress("UNCHECKED_CAST")
     @SuppressLint("StaticFieldLeak")
     inner class NotifyAsyncTask : AsyncTask<Any, Any, Any>() {
+        private val sCancelled: BooleanArray = BooleanArray(1)
+
+        fun cancelTask() {
+            sCancelled[0] = true
+            cancel(true)
+        }
+
         override fun doInBackground(vararg response: Any): Any {
-            saveCallResult(isCancelled, (response[0] as ApiResponse<RequestType>).results!!)
+            saveCallResult((response[0] as ApiResponse<RequestType>).results!!, sCancelled)
             return response[0]
         }
 
@@ -113,7 +120,7 @@ abstract class NetworkBoundResource<ResultType, RequestType> @MainThread constru
 
     // Called to save the result of the API response into the database
     @WorkerThread
-    protected abstract fun saveCallResult(isCancelled: Boolean, item: RequestType)
+    protected abstract fun saveCallResult(item: RequestType, sCancelled: BooleanArray)
 
     // Called with the data in the database to decide whether it should be
     // fetched from the network.
