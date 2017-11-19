@@ -28,33 +28,37 @@ class AndroidFragment : RefreshFragment() {
         androidViewModel = ViewModelProviders.of(this, modelFactory).get(AndroidViewModel::class.java)
         androidViewModel.androidData.observe(this, Observer<Resource<ApiResponse<List<AndroidData>>>> { data ->
             Log.e("androidViewModel ", data?.data?.results.toString() + "   " + data?.status + "    " + data?.isRefresh)
-            data?.let {
-                if (it.isRefresh!! && it.status == Status.LOADING) {
-                    if ((recyclerView.adapter as AndroidAdapter).itemCount == 0) {
-                        statusView.loading()
-                    }
-
-                } else if (it.isRefresh && it.status == Status.SUCCESS) {
-                    if ((data.data == null || data.data.results == null || data.data.results!!.isEmpty())
-                            && (recyclerView.adapter as AndroidAdapter).itemCount == 0) {
-                        statusView.empty()
-                    } else {
-                        statusView.visibility = View.GONE
-                    }
-                    (recyclerView.adapter as AndroidAdapter).replace(data.data?.results)
-                    refreshLayout.refreshComplete()
-
-                } else if (it.isRefresh && it.status == Status.ERROR) {
-                    if ((recyclerView.adapter as AndroidAdapter).itemCount == 0) {
-                        statusView.error()
-                    } else {
-                        toastHelper.showShortToast("获取数据失败")
-                    }
-                    refreshLayout.refreshComplete()
-                }
+            if (data?.isRefresh!!) {
+                doRefresh(data)
             }
         })
 
+    }
+
+    private fun doRefresh(data: Resource<ApiResponse<List<AndroidData>>>) {
+        when (data.status) {
+            Status.LOADING -> if ((recyclerView.adapter as AndroidAdapter).itemCount == 0) {
+                statusView.loading()
+            }
+            Status.SUCCESS -> {
+                if ((data.data?.results == null || data.data.results!!.isEmpty()) && (recyclerView.adapter as AndroidAdapter).itemCount == 0) {
+                    statusView.empty()
+                } else {
+                    statusView.visibility = View.GONE
+                }
+                (recyclerView.adapter as AndroidAdapter).replace(data.data?.results)
+                refreshLayout.refreshComplete()
+
+            }
+            else->{
+                if ((recyclerView.adapter as AndroidAdapter).itemCount == 0) {
+                    statusView.error()
+                } else {
+                    toastHelper.showShortToast("获取数据失败")
+                }
+                refreshLayout.refreshComplete()
+            }
+        }
     }
 
     override fun onRefresh() {

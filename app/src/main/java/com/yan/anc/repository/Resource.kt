@@ -30,16 +30,10 @@ import org.jetbrains.annotations.Nullable
 class Resource<T> private constructor(val status: Status, @param:Nullable @field:Nullable val data: T?, @param:Nullable @field:Nullable val message: String?, @param:Nullable @field:Nullable val isRefresh: Boolean?) {
     companion object {
 
-        fun <T> success(data: T?, isRefresh: Boolean): Resource<T>? {
-            return Resource(SUCCESS, data, null, isRefresh)
-        }
+        fun <T> success(data: T?, isRefresh: Boolean): Resource<T>? = Resource(SUCCESS, data, null, isRefresh)
 
-        fun <T> error(msg: String?, @Nullable data: T?, isRefresh: Boolean): Resource<T>? {
-            return Resource(ERROR, data, msg, isRefresh)
-        }
+        fun <T> error(msg: String?, @Nullable data: T?, isRefresh: Boolean): Resource<T>? = Resource(ERROR, data, msg, isRefresh)
 
-        fun <T> loading(@Nullable data: T?, isRefresh: Boolean): Resource<T>? {
-            return Resource(LOADING, data, null, isRefresh)
-        }
+        fun <T> loading(@Nullable data: T?, isRefresh: Boolean): Resource<T>? = Resource(LOADING, data, null, isRefresh)
     }
 }
