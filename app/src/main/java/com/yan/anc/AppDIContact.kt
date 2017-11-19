@@ -1,6 +1,5 @@
 package com.yan.anc
 
-import android.app.Application
 import android.arch.persistence.room.Room
 import android.content.Context
 import com.yan.anc.api.ANCApi
