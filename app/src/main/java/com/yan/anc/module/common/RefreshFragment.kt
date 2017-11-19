@@ -9,6 +9,7 @@ import com.yan.anc.R
 import com.yan.anc.base.BaseFragment
 import com.yan.anc.module.common.viewmodel.ModelFactory
 import com.yan.anc.DaggerAppDIContact_AppComponent
+import com.yan.anc.db.ANCDatabase
 import com.yan.anc.utils.ToastHelper
 import com.yan.anc.widget.StatusView
 import com.yan.pullrefreshlayout.PullRefreshLayout
@@ -26,6 +27,8 @@ open class RefreshFragment : BaseFragment() {
     @Inject lateinit var modelFactory: ModelFactory
 
     @Inject lateinit var toastHelper: ToastHelper
+
+    @Inject lateinit var ancDatabase: ANCDatabase
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         if (rootView == null) {

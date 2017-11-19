@@ -1,7 +1,10 @@
 package com.yan.anc
 
+import android.app.Application
+import android.arch.persistence.room.Room
 import android.content.Context
 import com.yan.anc.api.ANCApi
+import com.yan.anc.db.ANCDatabase
 import com.yan.anc.module.MainActivity
 import com.yan.anc.module.common.RefreshDIContact
 import com.yan.anc.module.common.viewmodel.ModelFactory
@@ -35,7 +38,9 @@ class AppDIContact {
 
     @Module
     class AppModule(private val app: App) {
-        private val api: ANCApi = Retrofit.Builder()
+        private val ancDatabase = Room.databaseBuilder(app, ANCDatabase::class.java, "anc.db").build()
+
+        private val api = Retrofit.Builder()
                 .baseUrl("https://api.github.com/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(LiveDataCallAdapterFactory())
@@ -63,8 +68,11 @@ class AppDIContact {
 
         @Provides
         @Singleton
-        fun provideModelFactory(): ModelFactory = ModelFactory(api)
+        fun provideModelFactory(): ModelFactory = ModelFactory(api, ancDatabase)
 
+        @Singleton
+        @Provides
+        fun provideDb(): ANCDatabase = ancDatabase
     }
 }
 

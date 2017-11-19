@@ -12,8 +12,6 @@ import com.yan.anc.module.common.RefreshFragment
 import com.yan.anc.repository.ApiResponse
 import com.yan.anc.repository.Resource
 import com.yan.anc.repository.Status
-import com.yan.anc.utils.ToastHelper
-import javax.inject.Inject
 import kotlin.collections.ArrayList
 
 /**

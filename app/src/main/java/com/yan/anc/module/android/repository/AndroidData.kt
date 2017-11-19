@@ -1,10 +1,15 @@
 package com.yan.anc.module.android.repository
 
+import android.arch.persistence.room.Entity
+import android.arch.persistence.room.PrimaryKey
+
+
 /**
  * Created by yan on 2017/11/13.
  */
 
-data class AndroidData(val _id: String?, val createdAt: String?, val desc: String?, val publishedAt: String?, val source: String?, val type: String?, val url: String?, val used: String?, val who: String?) {
+@Entity
+data class AndroidData(@PrimaryKey val _id: String = "test", val createdAt: String?, val desc: String?, val publishedAt: String?, val source: String?, val type: String?, val url: String?, val used: String?, val who: String?) {
 //    {
 //        "_id": "5a027569421aa90fe7253610",
 //        "createdAt": "2017-11-08T11:09:29.236Z",
@@ -16,4 +21,5 @@ data class AndroidData(val _id: String?, val createdAt: String?, val desc: Strin
 //        "used": true,
 //        "who": null
 //    }
+
 }
