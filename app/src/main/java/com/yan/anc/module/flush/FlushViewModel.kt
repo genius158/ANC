@@ -2,7 +2,6 @@ package com.yan.anc.module.flush
 
 import android.arch.lifecycle.*
 import android.graphics.drawable.Drawable
-import android.util.Log
 import android.widget.ImageView
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -19,7 +18,7 @@ import java.lang.ref.WeakReference
 class FlushViewModel(activity: FlushActivity, wrIv: WeakReference<ImageView>) : ViewModel() {
     private val flushImg: String = "http://api.dujin.org/bing/1366.php"
 
-    private val turnRoad: MutableLiveData<Int> = TestLiveData()
+    private val turnRoad: MutableLiveData<Int> = MutableLiveData()
 
     fun getTurnRoad(): MutableLiveData<Int> = turnRoad
 
@@ -39,26 +38,7 @@ class FlushViewModel(activity: FlushActivity, wrIv: WeakReference<ImageView>) : 
 
     @Suppress("UNCHECKED_CAST")
     class Factory(private val flushActivity: FlushActivity, private var iv: ImageView) : ViewModelProvider.NewInstanceFactory() {
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            return FlushViewModel(flushActivity, WeakReference(iv)) as T
-        }
-    }
-
-    class TestLiveData<T> : MutableLiveData<T>() {
-        public override fun onInactive() {
-            super.onInactive()
-            Log.e("TestLiveData", "onInactive")
-        }
-
-        override fun setValue(value: T) {
-            super.setValue(value)
-            Log.e("TestLiveData", "setValue")
-        }
-
-        public override fun onActive() {
-            super.onActive()
-            Log.e("TestLiveData", "onActive")
-        }
+        override fun <T : ViewModel?> create(modelClass: Class<T>): T = FlushViewModel(flushActivity, WeakReference(iv)) as T
     }
 
 }
