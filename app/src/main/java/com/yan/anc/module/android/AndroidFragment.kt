@@ -12,15 +12,11 @@ import com.yan.anc.module.common.RefreshFragment
 import com.yan.anc.repository.ApiResponse
 import com.yan.anc.repository.Resource
 import com.yan.anc.repository.Status
-import kotlin.collections.ArrayList
 
 /**
  * Created by yan on 2017/11/5.
  */
 class AndroidFragment : RefreshFragment() {
-
-    private var dataList: ArrayList<Any> = ArrayList()
-
     private lateinit var androidViewModel: AndroidViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,13 +44,18 @@ class AndroidFragment : RefreshFragment() {
                 }
                 (recyclerView.adapter as AndroidAdapter).replace(data.data?.results)
                 refreshLayout.refreshComplete()
-
             }
-            else->{
-                if ((recyclerView.adapter as AndroidAdapter).itemCount == 0) {
-                    statusView.error()
-                } else {
+            else -> {
+                if (data.data?.results != null && !data.data.results!!.isEmpty()) {
+                    (recyclerView.adapter as AndroidAdapter).replace(data.data.results)
+                    statusView.visibility = View.GONE
                     toastHelper.showShortToast("获取数据失败")
+                } else {
+                    if ((recyclerView.adapter as AndroidAdapter).itemCount == 0) {
+                        statusView.error()
+                    } else {
+                        toastHelper.showShortToast("获取数据失败")
+                    }
                 }
                 refreshLayout.refreshComplete()
             }
@@ -67,11 +68,6 @@ class AndroidFragment : RefreshFragment() {
 
     override fun onLoad(rootView: View) {
         super.onLoad(rootView)
-
-        dataList.add("12")
-        dataList.add("12")
-        dataList.add("12")
-
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.adapter = AndroidAdapter(context)
 
